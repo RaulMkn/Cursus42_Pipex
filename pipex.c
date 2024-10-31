@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:55:35 by rmakende          #+#    #+#             */
-/*   Updated: 2024/10/31 21:00:08 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/10/31 21:06:06 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ int main(int argc, char const *argv[])  //Dani: Necesitas buscar el comando (si 
         perror("Número incorrecto de argumentos. Usa: ./pipex infile 'grep a1' 'wc -w' outfile");
         return (-1);
     }
-    //Dani: Hay que matar a GPT por esta herejía.
+    //Dani: Hay que matar a GPT por esta herejía de pipex...
     return (0);
 }
 
