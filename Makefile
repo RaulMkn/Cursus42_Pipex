@@ -3,51 +3,51 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+         #
+#    By: root <root@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/04/17 19:11:54 by rmakende          #+#    #+#              #
-#    Updated: 2024/10/30 18:06:05 by rmakende         ###   ########.fr        #
+#    Created: 2024/10/24 21:07:40 by rmakende          #+#    #+#              #
+#    Updated: 2024/12/03 21:57:57 by root             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# El compilador de C a usar
 CC = gcc
-# Las flags para el compillador
 CFLAGS = -Wall -Wextra -Werror -g3
 
-# Directorios y nombres de librerías
 LIBFT_DIR = ./Libft
 LIBRARY = $(LIBFT_DIR)/libft.a
 LIB_HEADERS = $(LIBFT_DIR)/libft.h
 
-# Archivos del proyecto principal
-SRCS = pipex.c
+PRINTF_DIR = ./printf
+PRINTF = $(PRINTF_DIR)/libftprintf.a
+PRINT_HEADERS = $(PRINTF_DIR)/ft_printf.h
+
+SRCS = pipex.c\
+	   pipex_utils.c
 
 OBJS = $(SRCS:.c=.o)
-
 TARGET = pipex
-# Reglas
+
 all: $(LIBRARY) $(PRINTF) $(TARGET)
 
-# Compilar la librería Libft
 $(LIBRARY):
 	cd $(LIBFT_DIR) && $(MAKE)
 
-# Compilar el proyecto principal y enlazar con las librerías
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) $(LIBRARY)
+$(PRINTF):
+	cd $(PRINTF_DIR) && $(MAKE)
 
-# Limpiar archivos objeto y las librerías
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) $(LIBRARY) $(PRINTF)
+
 clean:
 	rm -f $(OBJS)
 	cd $(LIBFT_DIR) && $(MAKE) clean
+	cd $(PRINTF_DIR) && $(MAKE) clean
 
-# Limpiar todo, incluyendo el ejecutable y las librerías
 fclean: clean
 	rm -f $(TARGET)
 	cd $(LIBFT_DIR) && $(MAKE) fclean
+	cd $(PRINTF_DIR) && $(MAKE) fclean
 
-# Recompilar desde cero
 re: fclean all
 
-.PHONY: all clean fclean re test
+.PHONY: all clean fclean re

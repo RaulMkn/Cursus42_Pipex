@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 16:56:47 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/03 21:54:50 by root             ###   ########.fr       */
+/*   Created: 2024/12/03 20:58:09 by root              #+#    #+#             */
+/*   Updated: 2024/12/03 20:59:57 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "libft.h"
 
-# include "Libft/libft.h"
-# include "printf/ft_printf.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <errno.h>
-#include <sys/wait.h>
+char	*ft_strcpy(char *dest, const char *src)
+{
+	int     i;
+	char    *print;
 
-void	execute_command(char *cmd, char **envp);
-
-#endif
+	print = dest;
+	i = 0;
+	while (src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (print);
+}
