@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 20:55:23 by root              #+#    #+#             */
-/*   Updated: 2024/12/03 20:56:06 by root             ###   ########.fr       */
+/*   Updated: 2024/12/04 19:18:43 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	free_split(char **array)
 {
-	int i;
+	int	i;
 
-    i = 0;
+	i = 0;
 	if (!array)
 		return ;
 	while (array[i])
