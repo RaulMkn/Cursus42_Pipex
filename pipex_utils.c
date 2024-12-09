@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 21:45:08 by root              #+#    #+#             */
-/*   Updated: 2024/12/04 19:25:46 by root             ###   ########.fr       */
+/*   Updated: 2024/12/09 20:40:48 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,27 +74,21 @@ void	execute_command(char *cmd, char **envp)
 	char	**args;
 
 	if (!cmd || !*cmd)
-	{
-		fprintf(stderr, "Comando vacío o nulo\n");
 		exit(EXIT_FAILURE);
-	}
-	**args = ft_split(cmd, ' ');
+	args = ft_split(cmd, ' ');
 	if (!args || !args[0])
 	{
-		fprintf(stderr, "Error al dividir el comando\n");
 		free_split(args);
 		exit(EXIT_FAILURE);
 	}
 	path = find_command_path(args[0], envp);
 	if (!path)
 	{
-		fprintf(stderr, "Comando no encontrado: %s\n", args[0]);
 		free_split(args);
 		exit(EXIT_FAILURE);
 	}
 	if (execve(path, args, envp) == -1)
 	{
-		perror("Error al ejecutar el comando");
 		free_split(args);
 		free(path);
 		exit(EXIT_FAILURE);

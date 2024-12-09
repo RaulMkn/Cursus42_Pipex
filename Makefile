@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: root <root@student.42.fr>                  +#+  +:+       +#+         #
+#    By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 21:07:40 by rmakende          #+#    #+#              #
-#    Updated: 2024/12/03 21:57:57 by root             ###   ########.fr        #
+#    Updated: 2024/12/09 20:43:19 by rmakende         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,8 +40,8 @@ $(TARGET): $(OBJS)
 
 clean:
 	rm -f $(OBJS)
-	cd $(LIBFT_DIR) && $(MAKE) clean
-	cd $(PRINTF_DIR) && $(MAKE) clean
+	cd $(LIBFT_DIR) && $(MAKE) fclean
+	cd $(PRINTF_DIR) && $(MAKE) fclean
 
 fclean: clean
 	rm -f $(TARGET)

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:55:35 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/04 19:32:50 by root             ###   ########.fr       */
+/*   Updated: 2024/12/09 21:44:54 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	first_forker(int pipe_fd[2], int file_in, int file_out, char **envp, char *argv[])
+pid_t	first_forker(int pipe_fd[2], int file_in, int file_out, char **envp, char *argv[])
 {
 	pid_t	pid1;
 
@@ -36,10 +36,10 @@ void	first_forker(int pipe_fd[2], int file_in, int file_out, char **envp, char *
 		close(pipe_fd[1]);
 		execute_command(argv[2], envp);
 	}
-	waitpid(pid1, NULL, 0);
+	return (pid1);
 }
 
-void	second_forker(int pipe_fd[2], int file_in, int file_out, char **envp, char *argv[])
+pid_t	second_forker(int pipe_fd[2], int file_in, int file_out, char **envp, char *argv[])
 {
 	pid_t	pid2;
 
@@ -63,11 +63,14 @@ void	second_forker(int pipe_fd[2], int file_in, int file_out, char **envp, char 
 		close(pipe_fd[1]);
 		execute_command(argv[3], envp);
 	}
-	waitpid(pid2, NULL, 0);
+	return (pid2);
 }
 
 void	pipex(int pipe_fd[2], int file_in, int file_out, char **envp, char *argv[])
 {
+	pid_t pid1;
+	pid_t pid2;
+	
 	if (pipe(pipe_fd) == -1)
 	{
 		perror("Error al crear la tubería");
@@ -75,12 +78,14 @@ void	pipex(int pipe_fd[2], int file_in, int file_out, char **envp, char *argv[])
 		close(file_out);
 		exit(EXIT_FAILURE);
 	}
-	first_forker(pipe_fd, file_in, file_out, envp, argv);
-	second_forker(pipe_fd, file_in, file_out, envp, argv);
+	pid1 = first_forker(pipe_fd, file_in, file_out, envp, argv);
+	pid2 = second_forker(pipe_fd, file_in, file_out, envp, argv);
 	close(file_in);
 	close(file_out);
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
+	waitpid(pid1, NULL, 0);
+	waitpid(pid2, NULL, 0);
 }
 
 int main(int argc, char const *argv[], char **envp)
@@ -92,14 +97,10 @@ int main(int argc, char const *argv[], char **envp)
 
 	arg = (char **)argv;
 	if (argc != 5)
-	{
-		ft_printf("Cantidad inadecuada de argumentos. Ejemplo de uso: ./pipex file1 cmd1 cmd2 file2");
 		exit(EXIT_FAILURE);
-	}
 	file_in = open(argv[1], O_RDONLY);
 	if (file_in < 0)
 	{
-		perror("Error al abrir file1");
 		exit(EXIT_FAILURE);
 	}
 	file_out = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
