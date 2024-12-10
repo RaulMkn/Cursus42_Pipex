@@ -6,17 +6,24 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:55:35 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/09 21:44:54 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/10 21:55:49 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-pid_t	first_forker(int pipe_fd[2], int file_in, int file_out, char **envp, char *argv[])
+typedef struct {
+    int flag;
+    pid_t pid;
+} returner;
+
+returner	first_forker(int pipe_fd[2], int file_in, int file_out,
+char **envp, char *argv[])
 {
 	pid_t	pid1;
 
 	pid1 = fork();
+	returner result = {1, pid1}
 	if (pid1 == -1)
 	{
 		perror("Error al crear el proceso");
@@ -34,16 +41,18 @@ pid_t	first_forker(int pipe_fd[2], int file_in, int file_out, char **envp, char 
 		close(file_out);
 		close(pipe_fd[0]);
 		close(pipe_fd[1]);
-		execute_command(argv[2], envp);
+		return (result);
 	}
-	return (pid1);
+	return (result);
 }
 
-pid_t	second_forker(int pipe_fd[2], int file_in, int file_out, char **envp, char *argv[])
+returner	second_forker(int pipe_fd[2], int file_in, int file_out,
+char **envp, char *argv[])
 {
 	pid_t	pid2;
 
 	pid2 = fork();
+	returner result = {1, pid1}
 	if (pid2 == -1)
 	{
 		perror("Error al crear el proceso");
@@ -61,25 +70,28 @@ pid_t	second_forker(int pipe_fd[2], int file_in, int file_out, char **envp, char
 		close(file_out);
 		close(pipe_fd[0]);
 		close(pipe_fd[1]);
-		execute_command(argv[3], envp);
+		returner result = {1, pid1}
+		return (result);
 	}
-	return (pid2);
+	return (result);
 }
 
-void	pipex(int pipe_fd[2], int file_in, int file_out, char **envp, char *argv[])
+void	pipex(int file_in, int file_out, char **envp, char *argv[])
 {
-	pid_t pid1;
-	pid_t pid2;
-	
+	pid_t	pid1;
+	pid_t	pid2;
+	int		pipe_fd[2];
+
 	if (pipe(pipe_fd) == -1)
 	{
-		perror("Error al crear la tubería");
 		close(file_in);
 		close(file_out);
 		exit(EXIT_FAILURE);
 	}
-	pid1 = first_forker(pipe_fd, file_in, file_out, envp, argv);
-	pid2 = second_forker(pipe_fd, file_in, file_out, envp, argv);
+	if(first_forker(pipe_fd, file_in, file_out, envp, argv).flag == 1)
+		execute_command(argv[], env)
+	if(second_forker(pipe_fd, file_in, file_out, envp, argv).flag == 1)
+		execute_command(argv[], env)
 	close(file_in);
 	close(file_out);
 	close(pipe_fd[0]);
@@ -88,11 +100,10 @@ void	pipex(int pipe_fd[2], int file_in, int file_out, char **envp, char *argv[])
 	waitpid(pid2, NULL, 0);
 }
 
-int main(int argc, char const *argv[], char **envp)
+int	main(int argc, char const *argv[], char **envp)
 {
 	int		file_in;
 	int		file_out;
-	int		pipe_fd[2];
 	char	**arg;
 
 	arg = (char **)argv;
@@ -110,5 +121,5 @@ int main(int argc, char const *argv[], char **envp)
 		close(file_in);
 		exit(EXIT_FAILURE);
 	}
-	pipex(pipe_fd, file_in, file_out, envp, arg);
+	pipex(file_in, file_out, envp, arg);
 }

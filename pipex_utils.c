@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 21:45:08 by root              #+#    #+#             */
-/*   Updated: 2024/12/09 20:40:48 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/10 21:31:17 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,12 @@ char	*join_paths(const char *dir, const char *cmd)
 	return (joined_path);
 }
 
-char	*find_command_path(char *cmd, char **envp)
+char	*get_path_env(char **envp)
 {
-	char	*full_path;
 	char	*path_env;
 	int		i;
-	char	**path_dirs;
 
-	if (!cmd || !*cmd || !envp)
+	if (!envp)
 		return (NULL);
 	path_env = NULL;
 	i = 0;
@@ -49,6 +47,19 @@ char	*find_command_path(char *cmd, char **envp)
 		}
 		i++;
 	}
+	return (path_env);
+}
+
+char	*find_command_path(char *cmd, char **envp)
+{
+	char	*full_path;
+	char	*path_env;
+	char	**path_dirs;
+	int		i;
+
+	if (!cmd || !*cmd || !envp)
+		return (NULL);
+	path_env = get_path_env(envp);
 	if (!path_env)
 		return (NULL);
 	path_dirs = ft_split(path_env, ':');
