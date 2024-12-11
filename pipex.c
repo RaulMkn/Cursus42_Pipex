@@ -6,24 +6,18 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:55:35 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/10 21:55:49 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/10 22:34:17 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-typedef struct {
-    int flag;
-    pid_t pid;
-} returner;
-
-returner	first_forker(int pipe_fd[2], int file_in, int file_out,
-char **envp, char *argv[])
+t_returner	first_forker(int pipe_fd[2], int file_in, int file_out)
 {
-	pid_t	pid1;
+	pid_t				pid1;
+	const t_returner	result = {1, pid1};
 
 	pid1 = fork();
-	returner result = {1, pid1}
 	if (pid1 == -1)
 	{
 		perror("Error al crear el proceso");
@@ -46,13 +40,12 @@ char **envp, char *argv[])
 	return (result);
 }
 
-returner	second_forker(int pipe_fd[2], int file_in, int file_out,
-char **envp, char *argv[])
+t_returner	second_forker(int pipe_fd[2], int file_in, int file_out)
 {
-	pid_t	pid2;
+	pid_t				pid2;
+	const t_returner	result = {1, pid2};
 
 	pid2 = fork();
-	returner result = {1, pid1}
 	if (pid2 == -1)
 	{
 		perror("Error al crear el proceso");
@@ -70,7 +63,6 @@ char **envp, char *argv[])
 		close(file_out);
 		close(pipe_fd[0]);
 		close(pipe_fd[1]);
-		returner result = {1, pid1}
 		return (result);
 	}
 	return (result);
@@ -78,9 +70,9 @@ char **envp, char *argv[])
 
 void	pipex(int file_in, int file_out, char **envp, char *argv[])
 {
-	pid_t	pid1;
-	pid_t	pid2;
-	int		pipe_fd[2];
+	int			pipe_fd[2];
+	t_returner	result1;
+	t_returner	result2;
 
 	if (pipe(pipe_fd) == -1)
 	{
@@ -88,16 +80,18 @@ void	pipex(int file_in, int file_out, char **envp, char *argv[])
 		close(file_out);
 		exit(EXIT_FAILURE);
 	}
-	if(first_forker(pipe_fd, file_in, file_out, envp, argv).flag == 1)
-		execute_command(argv[], env)
-	if(second_forker(pipe_fd, file_in, file_out, envp, argv).flag == 1)
-		execute_command(argv[], env)
+	result1 = first_forker(pipe_fd, file_in, file_out);
+	result2 = second_forker(pipe_fd, file_in, file_out);
+	if (result1.flag == 1)
+		execute_command(argv[2], envp);
+	if (result2.flag == 1)
+		execute_command(argv[3], envp);
 	close(file_in);
 	close(file_out);
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
-	waitpid(pid1, NULL, 0);
-	waitpid(pid2, NULL, 0);
+	waitpid(result1.pid, NULL, 0);
+	waitpid(result2.pid, NULL, 0);
 }
 
 int	main(int argc, char const *argv[], char **envp)
