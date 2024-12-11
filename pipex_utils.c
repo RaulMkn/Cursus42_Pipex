@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 21:45:08 by root              #+#    #+#             */
-/*   Updated: 2024/12/11 20:53:31 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/11 23:42:45 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,14 @@ char	*get_path_env(char **envp)
 	i = 0;
 	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
-	return (envp[i] ? envp[i] + 5 : NULL);
+	if (envp[i])
+	{
+		return (envp[i] + 5);
+	}
+	else
+	{
+		return (NULL);
+	}
 }
 
 char	*find_command_path(char *cmd, char **envp)
@@ -72,18 +79,16 @@ char	*find_command_path(char *cmd, char **envp)
 		full_path = NULL;
 		i++;
 	}
-	free_split(path_dirs);
-	return (full_path);
+	return (free_split(path_dirs), full_path);
 }
 
 void	execute_command(char *cmd, char **envp)
 {
-	char **args;
-	char *path;
-	
+	char	**args;
+	char	*path;
+
 	if (!cmd || !*cmd)
 		exit(EXIT_FAILURE);
-
 	args = ft_split(cmd, ' ');
 	if (!args || !args[0])
 	{

@@ -6,38 +6,36 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:55:35 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/11 20:55:14 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/11 23:38:44 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	first_forker(int pipe_fd[2], int file_in)
+void	first_forker(int pipe_fd[2], int in, char **argv, char **envp)
 {
-	if (dup2(file_in, STDIN_FILENO) == -1 || dup2(pipe_fd[1], STDOUT_FILENO) ==
-		-1)
+	if (dup2(in, STDIN_FILENO) == -1 || dup2(pipe_fd[1], STDOUT_FILENO) == -1)
 	{
 		perror("Error en dup2 (primer fork)");
 		exit(EXIT_FAILURE);
 	}
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
-	close(file_in);
+	close(in);
+	execute_command(argv[2], envp);
 }
 
-void	second_forker(int pipe_fd[2], int file_out)
+void	second_forker(int pipe_fd[2], int out)
 {
-	if (dup2(pipe_fd[0], STDIN_FILENO) == -1 || dup2(file_out, STDOUT_FILENO) ==
-		-1)
+	if (dup2(pipe_fd[0], STDIN_FILENO) == -1 || dup2(out, STDOUT_FILENO) == -1)
 	{
 		perror("Error en dup2 (segundo fork)");
 		exit(EXIT_FAILURE);
 	}
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
-	close(file_out);
+	close(out);
 }
-
 
 void	pipex(int file_in, int file_out, char **envp, char *argv[])
 {
@@ -46,27 +44,17 @@ void	pipex(int file_in, int file_out, char **envp, char *argv[])
 	pid_t	pid2;
 
 	if (pipe(pipe_fd) == -1)
-	{
-		perror("Error al crear el pipe");
 		exit(EXIT_FAILURE);
-	}
 	pid1 = fork();
 	if (pid1 == -1)
-	{
-		perror("Error al crear el primer fork");
 		exit(EXIT_FAILURE);
-	}
 	if (pid1 == 0)
 	{
-		first_forker(pipe_fd, file_in);
-		execute_command(argv[2], envp);
+		first_forker(pipe_fd, file_in, argv[2], envp);
 	}
 	pid2 = fork();
 	if (pid2 == -1)
-	{
-		perror("Error al crear el segundo fork");
 		exit(EXIT_FAILURE);
-	}
 	if (pid2 == 0)
 	{
 		second_forker(pipe_fd, file_out);
