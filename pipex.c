@@ -6,114 +6,103 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:55:35 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/10 22:34:17 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/11 20:55:14 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-t_returner	first_forker(int pipe_fd[2], int file_in, int file_out)
+void	first_forker(int pipe_fd[2], int file_in)
 {
-	pid_t				pid1;
-	const t_returner	result = {1, pid1};
+	if (dup2(file_in, STDIN_FILENO) == -1 || dup2(pipe_fd[1], STDOUT_FILENO) ==
+		-1)
+	{
+		perror("Error en dup2 (primer fork)");
+		exit(EXIT_FAILURE);
+	}
+	close(pipe_fd[0]);
+	close(pipe_fd[1]);
+	close(file_in);
+}
 
+void	second_forker(int pipe_fd[2], int file_out)
+{
+	if (dup2(pipe_fd[0], STDIN_FILENO) == -1 || dup2(file_out, STDOUT_FILENO) ==
+		-1)
+	{
+		perror("Error en dup2 (segundo fork)");
+		exit(EXIT_FAILURE);
+	}
+	close(pipe_fd[0]);
+	close(pipe_fd[1]);
+	close(file_out);
+}
+
+
+void	pipex(int file_in, int file_out, char **envp, char *argv[])
+{
+	int		pipe_fd[2];
+	pid_t	pid1;
+	pid_t	pid2;
+
+	if (pipe(pipe_fd) == -1)
+	{
+		perror("Error al crear el pipe");
+		exit(EXIT_FAILURE);
+	}
 	pid1 = fork();
 	if (pid1 == -1)
 	{
-		perror("Error al crear el proceso");
-		close(file_in);
-		close(file_out);
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
+		perror("Error al crear el primer fork");
 		exit(EXIT_FAILURE);
 	}
 	if (pid1 == 0)
 	{
-		dup2(file_in, STDIN_FILENO);
-		dup2(pipe_fd[1], STDOUT_FILENO);
-		close(file_in);
-		close(file_out);
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-		return (result);
+		first_forker(pipe_fd, file_in);
+		execute_command(argv[2], envp);
 	}
-	return (result);
-}
-
-t_returner	second_forker(int pipe_fd[2], int file_in, int file_out)
-{
-	pid_t				pid2;
-	const t_returner	result = {1, pid2};
-
 	pid2 = fork();
 	if (pid2 == -1)
 	{
-		perror("Error al crear el proceso");
-		close(file_in);
-		close(file_out);
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
+		perror("Error al crear el segundo fork");
 		exit(EXIT_FAILURE);
 	}
 	if (pid2 == 0)
 	{
-		dup2(pipe_fd[0], STDIN_FILENO);
-		dup2(file_out, STDOUT_FILENO);
-		close(file_in);
-		close(file_out);
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-		return (result);
-	}
-	return (result);
-}
-
-void	pipex(int file_in, int file_out, char **envp, char *argv[])
-{
-	int			pipe_fd[2];
-	t_returner	result1;
-	t_returner	result2;
-
-	if (pipe(pipe_fd) == -1)
-	{
-		close(file_in);
-		close(file_out);
-		exit(EXIT_FAILURE);
-	}
-	result1 = first_forker(pipe_fd, file_in, file_out);
-	result2 = second_forker(pipe_fd, file_in, file_out);
-	if (result1.flag == 1)
-		execute_command(argv[2], envp);
-	if (result2.flag == 1)
+		second_forker(pipe_fd, file_out);
 		execute_command(argv[3], envp);
-	close(file_in);
-	close(file_out);
+	}
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
-	waitpid(result1.pid, NULL, 0);
-	waitpid(result2.pid, NULL, 0);
+	waitpid(pid1, NULL, 0);
+	waitpid(pid2, NULL, 0);
 }
 
 int	main(int argc, char const *argv[], char **envp)
 {
-	int		file_in;
-	int		file_out;
-	char	**arg;
+	int	file_in;
+	int	file_out;
 
-	arg = (char **)argv;
 	if (argc != 5)
-		exit(EXIT_FAILURE);
+	{
+		fprintf(stderr, "Uso: %s file1 cmd1 cmd2 file2\n", argv[0]);
+		return (EXIT_FAILURE);
+	}
 	file_in = open(argv[1], O_RDONLY);
 	if (file_in < 0)
 	{
-		exit(EXIT_FAILURE);
+		perror("Error al abrir file1");
+		return (EXIT_FAILURE);
 	}
 	file_out = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (file_out < 0)
 	{
 		perror("Error al abrir file2");
 		close(file_in);
-		exit(EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	}
-	pipex(file_in, file_out, envp, arg);
+	pipex(file_in, file_out, envp, (char **)argv);
+	close(file_in);
+	close(file_out);
+	return (EXIT_SUCCESS);
 }
