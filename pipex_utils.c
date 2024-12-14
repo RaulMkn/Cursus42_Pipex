@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 21:45:08 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/14 19:18:34 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/14 21:02:41 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,16 +96,19 @@ void	execute_command(char *cmd, char **envp)
 		perror("Error: comando vacío");
 		exit(EXIT_FAILURE);
 	}
-	path = find_command_path(args[0], envp);
+	path = find_command_path(args[0], envp);	
 	if (!path)
 	{
 		ft_putstr_fd(args[0], STDERR_FILENO);
-		ft_putstr_fd(": command not found\n", STDERR_FILENO);
 		free_split(args);
 		exit(127);
+		ft_putstr_fd(": command not found\n", STDERR_FILENO);
 	}
-	execve(path, args, envp);
-	perror("Error ejecutando comando");
+	if (execve(path, args, envp) == -1)
+	{
+		perror("Error ejecutando comando");
+		exit(1);
+	}
 	free_split(args);
 	free(path);
 	exit(errno);

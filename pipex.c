@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:55:35 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/14 19:08:27 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/14 20:41:02 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,26 +44,37 @@ void	pipex(int file_in, int file_out, char **envp, char *argv[])
 	pid_t	pid2;
 
 	if (pipe(pipe_fd) == -1)
+	{
+		perror("Error al crear el pipe");
 		exit(EXIT_FAILURE);
+	}
 	pid1 = fork();
 	if (pid1 == -1)
+	{
+		perror("Error al hacer fork");
 		exit(EXIT_FAILURE);
+	}
 	if (pid1 == 0)
 	{
 		first_forker(pipe_fd, file_in, argv[2], envp);
-		waitpid(pid1, NULL, 0);
+		exit(EXIT_FAILURE);
 	}
 	pid2 = fork();
 	if (pid2 == -1)
+	{
+		perror("Error al hacer fork");
 		exit(EXIT_FAILURE);
+	}
 	if (pid2 == 0)
 	{
 		second_forker(pipe_fd, file_out);
 		execute_command(argv[3], envp);
-		waitpid(pid2, NULL, 0);
+		exit(EXIT_FAILURE);
 	}
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
+	waitpid(pid1, NULL, 0);
+	waitpid(pid2, NULL, 0);
 }
 
 int	main(int argc, char const *argv[], char **envp)
@@ -81,7 +92,7 @@ int	main(int argc, char const *argv[], char **envp)
 	if (file_in < 0)
 	{
 		perror("Error al abrir file1");
-		return (0);
+		// return (0);
 	}
 	if (file_out < 0)
 	{
