@@ -6,13 +6,13 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:55:35 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/11 23:38:44 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/14 18:02:48 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	first_forker(int pipe_fd[2], int in, char **argv, char **envp)
+void	first_forker(int pipe_fd[2], int in, char *argv, char **envp)
 {
 	if (dup2(in, STDIN_FILENO) == -1 || dup2(pipe_fd[1], STDOUT_FILENO) == -1)
 	{
@@ -22,7 +22,7 @@ void	first_forker(int pipe_fd[2], int in, char **argv, char **envp)
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
 	close(in);
-	execute_command(argv[2], envp);
+	execute_command(argv, envp);
 }
 
 void	second_forker(int pipe_fd[2], int out)
