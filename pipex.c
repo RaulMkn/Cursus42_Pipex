@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:55:35 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/14 20:41:02 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/15 00:18:33 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,10 @@ void	first_forker(int pipe_fd[2], int in, char *argv, char **envp)
 	close(pipe_fd[1]);
 	close(in);
 	execute_command(argv, envp);
+	exit(EXIT_FAILURE);
 }
 
-void	second_forker(int pipe_fd[2], int out)
+void	second_forker(int pipe_fd[2], int out, char *argv, char **envp)
 {
 	if (dup2(pipe_fd[0], STDIN_FILENO) == -1 || dup2(out, STDOUT_FILENO) == -1)
 	{
@@ -35,52 +36,53 @@ void	second_forker(int pipe_fd[2], int out)
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
 	close(out);
+	execute_command(argv, envp);
+	exit(EXIT_FAILURE);
 }
 
-void	pipex(int file_in, int file_out, char **envp, char *argv[])
+void	handle_child_status(pid_t pid, int *final_exit_code)
+{
+	int	status;
+
+	if (waitpid(pid, &status, 0) == -1)
+	{
+		perror("waitpid");
+		exit(EXIT_FAILURE);
+	}
+	*final_exit_code = (status >> 8);
+}
+
+int	pipex(int file_in, int file_out, char **envp, char *argv[])
 {
 	int		pipe_fd[2];
 	pid_t	pid1;
 	pid_t	pid2;
+	int		exit_code;
 
 	if (pipe(pipe_fd) == -1)
-	{
-		perror("Error al crear el pipe");
 		exit(EXIT_FAILURE);
-	}
 	pid1 = fork();
 	if (pid1 == -1)
-	{
-		perror("Error al hacer fork");
 		exit(EXIT_FAILURE);
-	}
 	if (pid1 == 0)
-	{
 		first_forker(pipe_fd, file_in, argv[2], envp);
-		exit(EXIT_FAILURE);
-	}
 	pid2 = fork();
 	if (pid2 == -1)
-	{
-		perror("Error al hacer fork");
 		exit(EXIT_FAILURE);
-	}
 	if (pid2 == 0)
-	{
-		second_forker(pipe_fd, file_out);
-		execute_command(argv[3], envp);
-		exit(EXIT_FAILURE);
-	}
+		second_forker(pipe_fd, file_out, argv[3], envp);
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
-	waitpid(pid1, NULL, 0);
-	waitpid(pid2, NULL, 0);
+	handle_child_status(pid1, &exit_code);
+	handle_child_status(pid2, &exit_code);
+	return (exit_code);
 }
 
 int	main(int argc, char const *argv[], char **envp)
 {
 	int	file_in;
 	int	file_out;
+	int	exit_code;
 
 	if (argc != 5)
 	{
@@ -90,18 +92,16 @@ int	main(int argc, char const *argv[], char **envp)
 	file_in = open(argv[1], O_RDONLY);
 	file_out = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (file_in < 0)
-	{
 		perror("Error al abrir file1");
-		// return (0);
-	}
 	if (file_out < 0)
 	{
 		perror("Error al abrir file2");
+		pipex(file_in, file_out, envp, (char **)argv);
 		close(file_in);
 		return (EXIT_FAILURE);
 	}
-	pipex(file_in, file_out, envp, (char **)argv);
+	exit_code = pipex(file_in, file_out, envp, (char **)argv);
 	close(file_in);
 	close(file_out);
-	return (EXIT_SUCCESS);
+	return (exit_code);
 }
