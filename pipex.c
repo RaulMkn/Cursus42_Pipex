@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:55:35 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/14 18:02:48 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/14 19:08:27 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	pipex(int file_in, int file_out, char **envp, char *argv[])
 	if (pid1 == 0)
 	{
 		first_forker(pipe_fd, file_in, argv[2], envp);
+		waitpid(pid1, NULL, 0);
 	}
 	pid2 = fork();
 	if (pid2 == -1)
@@ -59,11 +60,10 @@ void	pipex(int file_in, int file_out, char **envp, char *argv[])
 	{
 		second_forker(pipe_fd, file_out);
 		execute_command(argv[3], envp);
+		waitpid(pid2, NULL, 0);
 	}
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
-	waitpid(pid1, NULL, 0);
-	waitpid(pid2, NULL, 0);
 }
 
 int	main(int argc, char const *argv[], char **envp)
@@ -77,12 +77,12 @@ int	main(int argc, char const *argv[], char **envp)
 		return (EXIT_FAILURE);
 	}
 	file_in = open(argv[1], O_RDONLY);
+	file_out = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (file_in < 0)
 	{
 		perror("Error al abrir file1");
-		return (EXIT_FAILURE);
+		return (0);
 	}
-	file_out = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (file_out < 0)
 	{
 		perror("Error al abrir file2");

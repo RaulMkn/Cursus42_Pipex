@@ -6,7 +6,7 @@
 #    By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 21:07:40 by rmakende          #+#    #+#              #
-#    Updated: 2024/12/14 18:02:07 by rmakende         ###   ########.fr        #
+#    Updated: 2024/12/14 19:23:11 by rmakende         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,7 @@ $(PRINTF):
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) $(LIBRARY) $(PRINTF)
 
+
 clean:
 	rm -f $(OBJS)
 	cd $(LIBFT_DIR) && $(MAKE) fclean
@@ -45,6 +46,7 @@ clean:
 
 fclean: clean
 	rm -f $(TARGET)
+	rm -rf *.txt
 	cd $(LIBFT_DIR) && $(MAKE) fclean
 	cd $(PRINTF_DIR) && $(MAKE) fclean
 
