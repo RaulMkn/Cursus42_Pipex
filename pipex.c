@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:55:35 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/15 00:38:04 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/15 16:43:20 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,14 @@ void	handle_child_status(pid_t pid, int *final_exit_code)
 		perror("waitpid");
 		exit(EXIT_FAILURE);
 	}
-	*final_exit_code = (status >> 8);
+	if (WIFEXITED(status))
+	{
+		*final_exit_code = WEXITSTATUS(status);
+	}
+	else if (WIFSIGNALED(status))
+	{
+		*final_exit_code = 127;
+	}
 }
 
 int	pipex(int file_in, int file_out, char **envp, char *argv[])
