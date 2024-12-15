@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 21:45:08 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/15 00:08:43 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/15 17:02:25 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ char	*join_paths(const char *dir, const char *cmd)
 	size_t	len_cmd;
 	int		needs_slash;
 
+	if (!dir || !cmd)
+		return (NULL);
 	len_dir = ft_strlen(dir);
 	len_cmd = ft_strlen(cmd);
 	needs_slash = (dir[len_dir - 1] != '/');
