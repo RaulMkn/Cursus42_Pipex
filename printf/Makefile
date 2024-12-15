@@ -6,11 +6,10 @@
 #    By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/17 19:11:54 by rmakende          #+#    #+#              #
-#    Updated: 2024/09/20 17:21:21 by rmakende         ###   ########.fr        #
+#    Updated: 2024/12/15 20:49:16 by rmakende         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# The name of your library
 NAME = libftprintf.a
 # The C compiler to use
 CC = gcc

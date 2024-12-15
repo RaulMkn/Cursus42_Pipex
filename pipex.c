@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:55:35 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/15 16:49:42 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/15 22:43:49 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,7 @@
 void	first_forker(int pipe_fd[2], int in, char *argv, char **envp)
 {
 	if (dup2(in, STDIN_FILENO) == -1 || dup2(pipe_fd[1], STDOUT_FILENO) == -1)
-	{
-		perror("Error en dup2 (primer fork)");
 		exit(EXIT_FAILURE);
-	}
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
 	close(in);
@@ -29,10 +26,7 @@ void	first_forker(int pipe_fd[2], int in, char *argv, char **envp)
 void	second_forker(int pipe_fd[2], int out, char *argv, char **envp)
 {
 	if (dup2(pipe_fd[0], STDIN_FILENO) == -1 || dup2(out, STDOUT_FILENO) == -1)
-	{
-		perror("Error en dup2 (segundo fork)");
 		exit(EXIT_FAILURE);
-	}
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
 	close(out);

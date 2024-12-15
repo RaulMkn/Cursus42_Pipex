@@ -3,14 +3,13 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: root <root@student.42.fr>                  +#+  +:+       +#+         #
+#    By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/17 19:11:54 by rmakende          #+#    #+#              #
-#    Updated: 2024/12/03 21:00:56 by root             ###   ########.fr        #
+#    Updated: 2024/12/15 20:49:28 by rmakende         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# The name of your library
 NAME = libft.a
 # The C compiler to use
 CC = gcc

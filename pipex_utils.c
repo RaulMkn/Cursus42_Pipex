@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 21:45:08 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/15 17:02:25 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/15 22:42:49 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,22 @@ char	*join_paths(const char *dir, const char *cmd)
 {
 	char	*joined_path;
 	size_t	len_dir;
-	size_t	len_cmd;
-	int		needs_slash;
+	char	*slash;
+	char	*final_path;
 
+	slash = "";
 	if (!dir || !cmd)
 		return (NULL);
+
 	len_dir = ft_strlen(dir);
-	len_cmd = ft_strlen(cmd);
-	needs_slash = (dir[len_dir - 1] != '/');
-	joined_path = malloc(len_dir + len_cmd + 1 + needs_slash);
+	if (dir[len_dir - 1] != '/')
+		slash = "/";
+	joined_path = ft_strjoin(dir, slash);
 	if (!joined_path)
 		return (NULL);
-	ft_strcpy(joined_path, dir);
-	if (needs_slash)
-		joined_path[len_dir] = '/';
-	ft_strcpy(joined_path + len_dir + needs_slash, cmd);
-	return (joined_path);
+	final_path = ft_strjoin(joined_path, cmd);
+	free(joined_path);
+	return (final_path);
 }
 
 char	*get_path_env(char **envp)

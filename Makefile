@@ -6,7 +6,7 @@
 #    By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 21:07:40 by rmakende          #+#    #+#              #
-#    Updated: 2024/12/15 17:14:04 by rmakende         ###   ########.fr        #
+#    Updated: 2024/12/15 22:06:23 by rmakende         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,6 +52,6 @@ fclean: clean
 	cd $(LIBFT_DIR) && $(MAKE) fclean
 	cd $(PRINTF_DIR) && $(MAKE) fclean
 
-re: fclean all clean
+re: fclean all
 
 .PHONY: all clean fclean re
