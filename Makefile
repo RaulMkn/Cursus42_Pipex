@@ -6,13 +6,13 @@
 #    By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 21:07:40 by rmakende          #+#    #+#              #
-#    Updated: 2024/12/15 22:06:23 by rmakende         ###   ########.fr        #
+#    Updated: 2024/12/18 16:02:34 by rmakende         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
-#CFLAGS = -g3 -Wall -Wextra -Werror -fsanitize=address
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -g3 -Wall -Wextra -Werror -fsanitize=address
+#CFLAGS = -Wall -Wextra -Werror
 
 
 LIBFT_DIR = ./Libft
@@ -27,9 +27,9 @@ SRCS = pipex.c\
 	   pipex_utils.c
 
 OBJS = $(SRCS:.c=.o)
-TARGET = pipex
+NAME = pipex
 
-all: $(LIBRARY) $(PRINTF) $(TARGET)
+all: $(LIBRARY) $(PRINTF) $(NAME)
 
 $(LIBRARY):
 	cd $(LIBFT_DIR) && $(MAKE)
@@ -37,8 +37,8 @@ $(LIBRARY):
 $(PRINTF):
 	cd $(PRINTF_DIR) && $(MAKE)
 
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) $(LIBRARY) $(PRINTF)
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBRARY) $(PRINTF)
 
 
 clean:
@@ -47,7 +47,7 @@ clean:
 	cd $(PRINTF_DIR) && $(MAKE) fclean
 
 fclean: clean
-	rm -f $(TARGET)
+	rm -f $(NAME)
 	rm -rf *.txt
 	cd $(LIBFT_DIR) && $(MAKE) fclean
 	cd $(PRINTF_DIR) && $(MAKE) fclean

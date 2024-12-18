@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:55:35 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/15 22:43:49 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/17 21:14:23 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,7 @@ int	main(int argc, char const *argv[], char **envp)
 	int	exit_code;
 
 	if (argc != 5)
-	{
-		fprintf(stderr, "Uso: %s file1 cmd1 cmd2 file2\n", argv[0]);
 		return (EXIT_FAILURE);
-	}
 	file_in = open(argv[1], O_RDONLY);
 	file_out = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (file_in < 0)

@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 21:45:08 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/15 22:42:49 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/18 16:10:28 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ char	*join_paths(const char *dir, const char *cmd)
 	slash = "";
 	if (!dir || !cmd)
 		return (NULL);
-
 	len_dir = ft_strlen(dir);
 	if (dir[len_dir - 1] != '/')
 		slash = "/";
@@ -64,8 +63,8 @@ char	*find_command_path(char *cmd, char **envp)
 	if (!path_dirs)
 		return (NULL);
 	full_path = NULL;
-	i = 0;
-	while (path_dirs[i++])
+	i = -1;
+	while (path_dirs[++i])
 	{
 		full_path = join_paths(path_dirs[i], cmd);
 		if (!full_path || (access(full_path, X_OK) == 0))
