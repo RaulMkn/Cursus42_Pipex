@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:55:35 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/17 21:14:23 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/22 17:08:34 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	handle_child_status(pid_t pid, int *final_exit_code)
 
 	if (waitpid(pid, &status, 0) == -1)
 	{
-		perror("waitpid");
+		perror(NULL);
 		exit(EXIT_FAILURE);
 	}
 	*final_exit_code = (status >> 8);
@@ -83,10 +83,10 @@ int	main(int argc, char const *argv[], char **envp)
 	file_in = open(argv[1], O_RDONLY);
 	file_out = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (file_in < 0)
-		perror("Error al abrir file1");
+		perror(argv[1]);
 	if (file_out < 0)
 	{
-		perror("Error al abrir file2");
+		perror(NULL);
 		pipex(file_in, file_out, envp, (char **)argv);
 		close(file_in);
 		return (EXIT_FAILURE);

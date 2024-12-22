@@ -6,7 +6,7 @@
 #    By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/17 19:11:54 by rmakende          #+#    #+#              #
-#    Updated: 2024/12/15 20:49:28 by rmakende         ###   ########.fr        #
+#    Updated: 2024/12/18 23:01:39 by rmakende         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,7 +57,8 @@ SRCS = ft_isalpha.c\
 	   ft_putendl_fd.c\
 	   ft_putnbr_fd.c\
 	   ft_free_split.c\
-	   ft_strcpy.c
+	   ft_strcpy.c\
+	   ft_strspn.c
 
 BONUS = ft_lstnew_bonus.c\
 		ft_lstadd_front_bonus.c\

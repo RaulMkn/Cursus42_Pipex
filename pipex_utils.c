@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 21:45:08 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/18 16:10:28 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/22 17:16:22 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,13 @@ char	*get_path_env(char **envp)
 	int	i;
 
 	i = 0;
-	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
+	while (envp[i])
+	{
+		if (ft_strnstr(envp[i], "PATH=", 5) == envp[i])
+			return (envp[i] + 5);
 		i++;
-	if (envp[i])
-		return (envp[i] + 5);
-	else
-		return (NULL);
+	}
+	return (NULL);
 }
 
 char	*find_command_path(char *cmd, char **envp)
@@ -86,14 +87,13 @@ void	execute_command(char *cmd, char **envp)
 	if (!args || !args[0])
 	{
 		free_split(args);
-		perror("Error: comando vacío");
+		perror(NULL);
 		exit(EXIT_FAILURE);
 	}
 	path = find_command_path(args[0], envp);
 	if (!path)
 	{
-		ft_putstr_fd(args[0], STDERR_FILENO);
-		ft_putstr_fd(": command not found\n", STDERR_FILENO);
+		perror(args[0]);
 		free_split(args);
 		exit(127);
 	}
