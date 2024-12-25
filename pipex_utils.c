@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 21:45:08 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/22 17:16:22 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/23 22:27:54 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,18 @@ void	execute_command(char *cmd, char **envp)
 {
 	char	**args;
 	char	*path;
+	int i;
 
 	if (!cmd || !*cmd)
 		exit(126);
 	args = ft_split(cmd, ' ');
+	i = 0;
+	while (args[i])
+	{	
+		args[i] = ft_cleaner(args[i], '\"');
+		args[i] = ft_cleaner(args[i], '\'');
+		i++;
+	}
 	if (!args || !args[0])
 	{
 		free_split(args);
@@ -93,7 +101,9 @@ void	execute_command(char *cmd, char **envp)
 	path = find_command_path(args[0], envp);
 	if (!path)
 	{
-		perror(args[0]);
+		ft_putstr_fd("command not found: ", 2);
+		ft_putstr_fd(args[0], 2);
+		ft_putstr_fd("\n", 2);
 		free_split(args);
 		exit(127);
 	}

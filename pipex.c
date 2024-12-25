@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:55:35 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/22 17:08:34 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/22 19:53:50 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	main(int argc, char const *argv[], char **envp)
 		perror(argv[1]);
 	if (file_out < 0)
 	{
-		perror(NULL);
+		perror(argv[4]);
 		pipex(file_in, file_out, envp, (char **)argv);
 		close(file_in);
 		return (EXIT_FAILURE);
