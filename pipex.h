@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:56:47 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/15 00:35:56 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/26 22:01:10 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define PIPEX_H
 
 # include "Libft/libft.h"
-# include "printf/ft_printf.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <fcntl.h>

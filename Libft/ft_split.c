@@ -2,29 +2,21 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+
-	+:+     */
-/*   By: rmakende <rmakende@student.42.fr>          +#+  +:+
-	+#+        */
-/*                                                +#+#+#+#+#+
-	+#+           */
-/*   Created: 2024/12/23 21:29:24 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/23 21:29:24 by rmakende         ###   ########.fr       */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/29 15:30:03 by rmakende          #+#    #+#             */
+/*   Updated: 2024/12/29 15:30:03 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-
-static char	**asign_memory(char const *s, char c)
+static char	**asign_memory(char const *s, char c, int i, int k)
 {
-	char **str;
-	int i;
-	int k;
-	char quote;
+	char	**str;
+	char	quote;
 
-	i = 0;
-	k = 0;
 	while (s[i] != '\0')
 	{
 		while (s[i] == c)
@@ -62,12 +54,13 @@ static void	*free_memory(char **str, int k)
 
 static int	asign_j(const char *s, char c, int i)
 {
-	int j;
+	int		j;
+	char	quote;
 
 	j = i;
 	if (s[i] == '\'' || s[i] == '\"')
 	{
-		char quote = s[i];
+		quote = s[i];
 		j++;
 		while (s[j] != quote && s[j] != '\0')
 		{
@@ -86,23 +79,25 @@ static int	asign_j(const char *s, char c, int i)
 	return (j);
 }
 
-static char	**true_split(char **str, char const *s, char c, int i)
+static char	**true_split(char **str, char const *s, char c)
 {
-	int k = 0;
-	int j, l;
+	int	k;
+	int	j;
+	int	l;
+	int	i;
 
+	k = 0;
+	i = 0;
 	while (s[i] != '\0')
 	{
 		while (s[i] == c)
 			i++;
-
 		if (s[i] != '\0')
 		{
 			j = asign_j(s, c, i);
 			str[k] = (char *)malloc((j - i + 1) * sizeof(char));
 			if (!str[k])
 				return (free_memory(str, k));
-
 			l = 0;
 			while (i < j)
 				str[k][l++] = s[i++];
@@ -115,13 +110,15 @@ static char	**true_split(char **str, char const *s, char c, int i)
 
 char	**ft_split(char const *s, char c)
 {
-	int i;
-	char **str;
+	int		i;
+	int		k;
+	char	**str;
 
 	i = 0;
-	str = asign_memory(s, c);
+	k = 0;
+	str = asign_memory(s, c, i, k);
 	if (!str)
 		return (NULL);
-	str = true_split(str, s, c, i);
+	str = true_split(str, s, c);
 	return (str);
 }

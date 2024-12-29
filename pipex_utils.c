@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 21:45:08 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/23 22:27:54 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/29 16:11:38 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,34 +76,39 @@ char	*find_command_path(char *cmd, char **envp)
 	return (free_split(path_dirs), full_path);
 }
 
-void	execute_command(char *cmd, char **envp)
+void	clean_arguments(char **args)
 {
-	char	**args;
-	char	*path;
-	int i;
+	int	i;
 
-	if (!cmd || !*cmd)
-		exit(126);
-	args = ft_split(cmd, ' ');
 	i = 0;
 	while (args[i])
-	{	
+	{
 		args[i] = ft_cleaner(args[i], '\"');
 		args[i] = ft_cleaner(args[i], '\'');
 		i++;
 	}
+}
+
+void	execute_command(char *cmd, char **envp)
+{
+	char	**args;
+	char	*path;
+
+	if (!cmd || !*cmd)
+		exit(126);
+	args = ft_split(cmd, ' ');
 	if (!args || !args[0])
 	{
 		free_split(args);
 		perror(NULL);
 		exit(EXIT_FAILURE);
 	}
+	clean_arguments(args);
 	path = find_command_path(args[0], envp);
 	if (!path)
 	{
 		ft_putstr_fd("command not found: ", 2);
 		ft_putstr_fd(args[0], 2);
-		ft_putstr_fd("\n", 2);
 		free_split(args);
 		exit(127);
 	}

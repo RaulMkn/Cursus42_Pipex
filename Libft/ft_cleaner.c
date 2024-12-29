@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 20:26:04 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/25 14:35:11 by rmakende         ###   ########.fr       */
+/*   Updated: 2024/12/29 15:37:08 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*ft_cleaner(char *str, char remover)
 		if (str[i] != remover)
 		{
 			to_free = tmp;
-			tmp = ft_strjoin(tmp, (char[]){str[i], '\0'});
+			tmp = ft_strjoin(tmp, ((char []){str[i], '\0'}));
 			free(to_free);
 			if (!tmp)
 				return (NULL);
