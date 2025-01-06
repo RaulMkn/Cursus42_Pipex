@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 21:45:08 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/29 16:11:38 by rmakende         ###   ########.fr       */
+/*   Updated: 2025/01/03 00:56:59 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ char	*join_paths(const char *dir, const char *cmd)
 		return (NULL);
 	final_path = ft_strjoin(joined_path, cmd);
 	free(joined_path);
+	if (!final_path)
+		return (NULL);
 	return (final_path);
 }
 
@@ -76,7 +78,7 @@ char	*find_command_path(char *cmd, char **envp)
 	return (free_split(path_dirs), full_path);
 }
 
-void	clean_arguments(char **args)
+char	**clean_arguments(char **args)
 {
 	int	i;
 
@@ -84,9 +86,20 @@ void	clean_arguments(char **args)
 	while (args[i])
 	{
 		args[i] = ft_cleaner(args[i], '\"');
+		if (!args[i])
+		{
+		    free_split(args);
+		    return (NULL);
+		}
 		args[i] = ft_cleaner(args[i], '\'');
+		if (!args[i])
+		{
+		    free_split(args);
+		    return (NULL);
+		}
 		i++;
 	}
+	return (args);
 }
 
 void	execute_command(char *cmd, char **envp)
@@ -103,13 +116,13 @@ void	execute_command(char *cmd, char **envp)
 		perror(NULL);
 		exit(EXIT_FAILURE);
 	}
-	clean_arguments(args);
+	args = clean_arguments(args);
 	path = find_command_path(args[0], envp);
 	if (!path)
 	{
 		ft_putstr_fd("command not found: ", 2);
 		ft_putstr_fd(args[0], 2);
-		free_split(args);
+		//free_split(args);
 		exit(127);
 	}
 	execve(path, args, envp);

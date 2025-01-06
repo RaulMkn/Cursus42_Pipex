@@ -122,3 +122,27 @@ char	**ft_split(char const *s, char c)
 	str = true_split(str, s, c);
 	return (str);
 }
+#include <stdio.h>
+#include <stdlib.h>
+
+void	free_array(char **array)
+{
+	if (!array)
+		return;
+	for (int i = 0; array[i]; i++)
+		free(array[i]);
+	free(array);
+}
+
+int	main(void)
+{
+	char	**result = ft_split("this is a test string", ' ');
+
+	if (!result)
+		return (1);
+	for (int i = 0; result[i]; i++)
+		printf("result[%d]: %s\n", i, result[i]);
+
+	free_array(result);
+	return (0);
+}

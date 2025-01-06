@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free_split.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 20:55:23 by root              #+#    #+#             */
-/*   Updated: 2024/12/04 19:18:43 by root             ###   ########.fr       */
+/*   Updated: 2025/01/02 20:35:37 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,6 @@ void	free_split(char **array)
 		free(array[i]);
 		i++;
 	}
+	array = NULL;
 	free(array);
 }
