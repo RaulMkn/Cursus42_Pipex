@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:55:35 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/22 19:53:50 by rmakende         ###   ########.fr       */
+/*   Updated: 2025/01/14 19:16:02 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,17 @@
 void	first_forker(int pipe_fd[2], int in, char *argv, char **envp)
 {
 	if (dup2(in, STDIN_FILENO) == -1 || dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+	{
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
+		if (in > 0)
+			close(in);
 		exit(EXIT_FAILURE);
+	}
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
-	close(in);
+	if (in > 0)
+		close(in);
 	execute_command(argv, envp);
 	exit(EXIT_FAILURE);
 }
@@ -26,10 +33,17 @@ void	first_forker(int pipe_fd[2], int in, char *argv, char **envp)
 void	second_forker(int pipe_fd[2], int out, char *argv, char **envp)
 {
 	if (dup2(pipe_fd[0], STDIN_FILENO) == -1 || dup2(out, STDOUT_FILENO) == -1)
+	{
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
+		if (out > 0)
+			close(out);
 		exit(EXIT_FAILURE);
+	}
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
-	close(out);
+	if (out > 0)
+		close(out);
 	execute_command(argv, envp);
 	exit(EXIT_FAILURE);
 }
@@ -92,7 +106,9 @@ int	main(int argc, char const *argv[], char **envp)
 		return (EXIT_FAILURE);
 	}
 	exit_code = pipex(file_in, file_out, envp, (char **)argv);
-	close(file_in);
-	close(file_out);
+	if (file_in > 0)
+		close(file_in);
+	if (file_out > 0)
+		close(file_out);
 	return (exit_code);
 }
