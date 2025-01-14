@@ -6,13 +6,13 @@
 #    By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 21:07:40 by rmakende          #+#    #+#              #
-#    Updated: 2024/12/26 22:06:44 by rmakende         ###   ########.fr        #
+#    Updated: 2025/01/14 19:49:16 by rmakende         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
-CFLAGS = -g3 -Wall -Wextra -Werror #-fsanitize=address
-#CFLAGS = -Wall -Wextra -Werror
+#CFLAGS = -g3 -Wall -Wextra -Werror -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror
 
 
 LIBFT_DIR = ./Libft
