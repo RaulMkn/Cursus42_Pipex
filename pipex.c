@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 16:55:35 by rmakende          #+#    #+#             */
-/*   Updated: 2025/01/14 19:16:02 by rmakende         ###   ########.fr       */
+/*   Updated: 2025/01/15 22:35:39 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,9 @@ int	main(int argc, char const *argv[], char **envp)
 	if (argc != 5)
 		return (EXIT_FAILURE);
 	file_in = open(argv[1], O_RDONLY);
-	file_out = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (file_in < 0)
 		perror(argv[1]);
+	file_out = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (file_out < 0)
 	{
 		perror(argv[4]);

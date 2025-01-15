@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 17:13:18 by rmakende          #+#    #+#             */
-/*   Updated: 2024/12/23 16:29:08 by rmakende         ###   ########.fr       */
+/*   Updated: 2025/01/15 21:37:34 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	ft_putnbr_fd(int n, int fd);
 void	free_split(char **array);
 char	*ft_strcpy(char *dest, const char *src);
 size_t	ft_strspn(const char *s, const char *accept);
-char	*ft_cleaner(char *str, char remover);
+char	*ft_cleaner(char *str, char *removers);
 
 typedef struct s_list
 {

@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 21:45:08 by rmakende          #+#    #+#             */
-/*   Updated: 2025/01/14 19:52:31 by rmakende         ###   ########.fr       */
+/*   Updated: 2025/01/15 22:31:22 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	*find_command_path(char *cmd, char **envp)
 
 	if (!cmd || !*cmd || !envp)
 		return (NULL);
-	if (ft_strchr(cmd, '/') && access(cmd, X_OK) == 0)
+	if (ft_strchr(cmd, '/'))
 		return (ft_strdup(cmd));
 	if (!path_env)
 		return (NULL);
@@ -78,20 +78,31 @@ char	*find_command_path(char *cmd, char **envp)
 	return (free_split(path_dirs), full_path);
 }
 
-char	**clean_arguments(char **args)
+char	**clean_arguments(char **args, char **path, char **envp)
 {
 	int	i;
 
 	i = 0;
 	while (args[i])
 	{
-		args[i] = ft_cleaner(args[i], '\"');
-		if (!args[i])
-			return (NULL);
-		args[i] = ft_cleaner(args[i], '\'');
+		args[i] = ft_cleaner(args[i], "\"'");
 		if (!args[i])
 			return (NULL);
 		i++;
+	}
+	*path = find_command_path(args[0], envp);
+	if (!*path)
+	{
+		if (ft_strchr(args[0], '/'))
+			perror(args[0]);
+		else
+		{
+			ft_putstr_fd("command not found: ", 2);
+			ft_putstr_fd(args[0], 2);
+			ft_putstr_fd("\n", 2);
+		}
+		free_split(args);
+		exit(127);
 	}
 	return (args);
 }
@@ -110,16 +121,9 @@ void	execute_command(char *cmd, char **envp)
 		perror(NULL);
 		exit(EXIT_FAILURE);
 	}
-	args = clean_arguments(args);
-	path = find_command_path(args[0], envp);
-	if (!path)
-	{
-		ft_putstr_fd(args[0], 2);
-		ft_putstr_fd("command not found\n", 2);
-		free_split(args);
-		exit(127);
-	}
+	args = clean_arguments(args, &path, envp);
 	execve(path, args, envp);
+	perror(path);
 	free_split(args);
 	free(path);
 	exit(errno);
