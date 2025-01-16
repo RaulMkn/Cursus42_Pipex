@@ -6,7 +6,7 @@
 #    By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 21:07:40 by rmakende          #+#    #+#              #
-#    Updated: 2025/01/16 20:11:04 by rmakende         ###   ########.fr        #
+#    Updated: 2025/01/16 20:12:28 by rmakende         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,6 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
-	rm -rf *.txt
 	cd $(LIBFT_DIR) && $(MAKE) fclean
 
 re: fclean all
