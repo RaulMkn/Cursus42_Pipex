@@ -6,18 +6,16 @@
 #    By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/24 21:07:40 by rmakende          #+#    #+#              #
-#    Updated: 2025/01/14 19:49:16 by rmakende         ###   ########.fr        #
+#    Updated: 2025/01/16 20:11:04 by rmakende         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
-#CFLAGS = -g3 -Wall -Wextra -Werror -fsanitize=address
 CFLAGS = -Wall -Wextra -Werror
 
 
 LIBFT_DIR = ./Libft
 LIBRARY = $(LIBFT_DIR)/libft.a
-LIB_HEADERS = $(LIBFT_DIR)/libft.h
 
 SRCS = pipex.c\
 	   pipex_utils.c
@@ -31,7 +29,7 @@ $(LIBRARY):
 	cd $(LIBFT_DIR) && $(MAKE)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBRARY) $(PRINTF)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBRARY)
 
 clean:
 	rm -f $(OBJS)
