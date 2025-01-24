@@ -53,7 +53,7 @@ Las siguientes funciones están permitidas y son utilizadas en la implementació
 - Gestión de memoria: `malloc`, `free`.
 - Manejo de errores: `perror`, `strerror`.
 - Llamadas al sistema para procesos: `access`, `dup`, `dup2`, `execve`, `exit`, `fork`, `pipe`, `unlink`, `wait`, `waitpid`.
-- 
+  
 ## Estructura del proyecto
 
 - **Archivos entregados:**
