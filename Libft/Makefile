@@ -6,22 +6,22 @@
 #    By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/17 19:11:54 by rmakende          #+#    #+#              #
-#    Updated: 2024/12/23 16:29:21 by rmakende         ###   ########.fr        #
+#    Updated: 2025/05/14 21:12:23 by rmakende         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
-# The C compiler to use
+
 CC = gcc
-# The archiver to use
+
 AR = ar
-# The flags to use with the archiver
+
 ARFLAGS = -rc
-# The flags to use with the C compiler
-CFLAGS = -Wall -Wextra -Werror -g3 
-# The command to remove files
+
+CFLAGS = -Wall -Wextra -Werror
+
 RM = rm -f
-# A list of all .c files in the current directory
+
 SRCS = ft_isalpha.c\
 	   ft_isdigit.c\
 	   ft_isalnum.c\
@@ -59,7 +59,11 @@ SRCS = ft_isalpha.c\
 	   ft_free_split.c\
 	   ft_strcpy.c\
 	   ft_strspn.c\
-	   ft_cleaner.c
+	   ft_cleaner.c\
+	   get_next_line.c\
+	   get_next_line_utils.c\
+	   ft_printf.c\
+	   ft_printf_utils.c
 
 BONUS = ft_lstnew_bonus.c\
 		ft_lstadd_front_bonus.c\
@@ -71,22 +75,20 @@ BONUS = ft_lstnew_bonus.c\
 		ft_lstiter_bonus.c\
 		ft_lstmap_bonus.c
 
-# A list of all .o files that correspond to the .c files
 OBJS = $(SRCS:.c=.o)
-# A list of all .o files of bonus
+
 BNS = $(BONUS:.c=.o)
-# The default target - builds the library
+
 all: $(NAME)
-# A rule to build the library from the .o files
+
 $(NAME): $(OBJS) $(BNS)
 	$(AR) $(ARFLAGS) $(NAME) $(OBJS) $(BNS)
-# A rule to remove all .o files
+
 clean:
 	$(RM) $(OBJS) $(BNS)
-# A rule to remove all .o files and the library
+
 fclean: clean
 	$(RM) $(NAME) $(BNS)
-# A rule to rebuild everything from scratch
+
 re: fclean all
-# A special rule to tell make that these targets aren't files
 .PHONY: all fclean re clean

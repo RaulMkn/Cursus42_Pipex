@@ -6,7 +6,7 @@
 /*   By: rmakende <rmakende@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 17:13:18 by rmakende          #+#    #+#             */
-/*   Updated: 2025/01/15 21:37:34 by rmakende         ###   ########.fr       */
+/*   Updated: 2025/05/14 21:19:37 by rmakende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <stddef.h>
 # include <stdlib.h>
 # include <limits.h>
+# include "get_next_line.h"
+# include "ft_printf.h"
 
 int		ft_atoi(const char *str, int *flag);
 void	ft_bzero(void *s, size_t n);
